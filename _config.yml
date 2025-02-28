@@ -52,4 +52,4 @@ plugins:
 header_pages:
   - categories.md  # 添加此行
   - about.md       # 默认存在的其他页面
-markdown: kramdown
+markdown: commonmark
