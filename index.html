@@ -446,7 +446,7 @@
     <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
   </button>
   <span class="player-info" id="playerInfo"></span>
-  <audio id="audio" loop preload="none">
+  <audio id="audio" loop preload="none" autoplay>
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 </div>
@@ -684,7 +684,14 @@
     }
   });
 
-  audio.addEventListener('ended', () => {
+  audio.addEventListener('play', () => {
+    btn.classList.add('playing');
+    playIcon.style.display = 'none';
+    pauseIcon.style.display = '';
+    info.textContent = '正在播放';
+  });
+
+  audio.addEventListener('pause', () => {
     btn.classList.remove('playing');
     playIcon.style.display = '';
     pauseIcon.style.display = 'none';
