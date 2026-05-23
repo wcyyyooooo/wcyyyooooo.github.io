@@ -1,13 +1,6 @@
 [
-  { "title": "雪国", "author": "川端康成", "status": "reading" },
-  { "title": "夜晚的潜水艇", "author": "陈春成", "status": "reading" },
-  { "title": "都柏林人", "author": "乔伊斯", "status": "reading" },
-  { "title": "围城", "author": "钱锺书", "status": "read", "date": "2026-05-10" },
-  { "title": "局外人", "author": "加缪", "status": "read", "date": "2026-04-22" },
-  { "title": "挪威的森林", "author": "村上春树", "status": "read", "date": "2026-03-15" },
-  { "title": "月亮与六便士", "author": "毛姆", "status": "read", "date": "2026-02-08" },
-  { "title": "1984", "author": "奥威尔", "status": "read", "date": "2025-12-20" },
-  { "title": "百年孤独", "author": "马尔克斯", "status": "read", "date": "2025-11-05" },
-  { "title": "活着", "author": "余华", "status": "read", "date": "2025-09-18" },
-  { "title": "人类群星闪耀时", "author": "茨威格", "status": "read", "date": "2025-08-01" }
+  { "title": "雪国", "status": "reading" },
+  { "title": "夜晚的潜水艇", "status": "reading" },
+  { "title": "局外人", "status": "read", "date": "2026-04-22" },
+  { "title": "人类群星闪耀时", "status": "read", "date": "2025-08-01" }
 ]
