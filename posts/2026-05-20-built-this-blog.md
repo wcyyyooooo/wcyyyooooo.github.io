@@ -1,7 +1,6 @@
 ---
-date: 2026-05-20
-title: 搭建了这个博客
-tags: [博客]
+date: 2026-05-22
+title: Hello World
+tags: []
 ---
 
-用纯 HTML 写了一个极简的个人主页，没有框架，没有构建工具，干干净净。托管在 GitHub Pages，写好就上线。
