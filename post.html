@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文章</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #fafafa;
+    color: #333;
+    line-height: 1.9;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 4rem;
+  }
+
+  .back {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: #999;
+    text-decoration: none;
+    margin-bottom: 2rem;
+    transition: color 0.2s;
+  }
+
+  .back:hover { color: #333; }
+
+  .post-date {
+    font-size: 0.85rem;
+    color: #bbb;
+    margin-bottom: 0.5rem;
+  }
+
+  .post-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+  }
+
+  .post-body {
+    font-size: 0.95rem;
+    color: #444;
+  }
+
+  .post-body p {
+    margin-bottom: 1rem;
+  }
+
+  .post-body code {
+    background: #f0f0f0;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+
+  .post-body pre {
+    background: #f0f0f0;
+    padding: 1rem 1.2rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+    font-size: 0.88em;
+    line-height: 1.6;
+  }
+
+  .post-body pre code {
+    background: none;
+    padding: 0;
+  }
+
+  .post-body a {
+    color: #555;
+    text-decoration: underline;
+  }
+
+  .post-body h2 {
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin: 2rem 0 0.8rem;
+  }
+
+  .post-body blockquote {
+    border-left: 2px solid #ddd;
+    padding-left: 1rem;
+    color: #888;
+    margin-bottom: 1rem;
+  }
+
+  .post-tags {
+    margin-top: 2.5rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .post-tags span {
+    font-size: 0.78rem;
+    color: #aaa;
+    background: #f0f0f0;
+    padding: 1px 8px;
+    border-radius: 3px;
+  }
+
+  .error {
+    text-align: center;
+    color: #bbb;
+    padding: 4rem 0;
+  }
+
+  @media (max-width: 480px) {
+    .container { padding-top: 2rem; }
+    .post-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="container" id="container">
+    <p class="error">加载中…</p>
+  </div>
+
+  <script>
+    function renderMarkdown(text) {
+      const lines = text.split('\n');
+      let html = '';
+      let inCode = false;
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        if (line.startsWith('```')) {
+          inCode = !inCode;
+          html += inCode ? '<pre>' : '</pre>';
+          continue;
+        }
+
+        if (inCode) {
+          html += line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '\n';
+          continue;
+        }
+
+        let processed = line
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/`([^`]+)`/g, '<code>$1</code>')
+          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+          .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+
+        if (line.startsWith('## ')) {
+          html += `<h2>${processed.slice(3)}</h2>`;
+        } else if (line.startsWith('> ')) {
+          html += `<blockquote>${processed.slice(2)}</blockquote>`;
+        } else if (line.trim() === '') {
+          html += '';
+        } else {
+          html += `<p>${processed}</p>`;
+        }
+      }
+
+      return html;
+    }
+
+    function parseFrontmatter(text) {
+      const match = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+      if (!match) return { meta: {}, body: text };
+      const meta = {};
+      match[1].split('\n').forEach(line => {
+        const [key, ...rest] = line.split(':');
+        if (key && rest.length) {
+          let val = rest.join(':').trim();
+          if (val.startsWith('[') && val.endsWith(']')) {
+            val = val.slice(1, -1).split(',').map(s => s.trim()).filter(Boolean);
+          }
+          meta[key.trim()] = val;
+        }
+      });
+      return { meta, body: match[2].trim() };
+    }
+
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      return `${d.getFullYear()} 年 ${d.getMonth() + 1} 月 ${d.getDate()} 日`;
+    }
+
+    async function load() {
+      const container = document.getElementById('container');
+      const params = new URLSearchParams(window.location.search);
+      const file = params.get('p');
+
+      if (!file) {
+        container.innerHTML = '<p class="error">未指定文章。</p>';
+        return;
+      }
+
+      try {
+        const r = await fetch(`posts/${file}`);
+        if (!r.ok) throw new Error('Not found');
+        const text = await r.text();
+        const { meta, body } = parseFrontmatter(text);
+
+        document.title = meta.title || '文章';
+
+        const tagsHtml = meta.tags && meta.tags.length
+          ? `<div class="post-tags">${meta.tags.map(t => `<span>${t}</span>`).join('')}</div>`
+          : '';
+
+        container.innerHTML = `
+          <a class="back" href="/">&larr; 返回</a>
+          <div class="post-date">${formatDate(meta.date)}</div>
+          <h1 class="post-title">${meta.title || ''}</h1>
+          <div class="post-body">${renderMarkdown(body)}</div>
+          ${tagsHtml}
+        `;
+      } catch (e) {
+        container.innerHTML = '<p class="error">文章加载失败。</p>';
+      }
+    }
+
+    load();
+  </script>
+</body>
+</html>
