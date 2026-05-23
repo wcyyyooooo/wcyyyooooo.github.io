@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>wcyyyooooo</title>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
   * {
     margin: 0;
@@ -195,6 +194,16 @@
   <div class="timeline" id="timeline"></div>
 
   <script>
+    function renderMarkdown(text) {
+      return text
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+        .split('\n\n').map(p => `<p>${p.trim()}</p>`).join('');
+    }
+
     function parseFrontmatter(text) {
       const match = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
       if (!match) return { meta: {}, body: text };
@@ -222,18 +231,37 @@
     }
 
     async function loadPosts() {
-      const res = await fetch('posts/index.json');
-      const files = await res.json();
+      const timeline = document.getElementById('timeline');
+
+      let files;
+      try {
+        const res = await fetch('posts/index.json');
+        if (!res.ok) throw new Error('Failed to load post list');
+        files = await res.json();
+      } catch (e) {
+        timeline.innerHTML = '<p style="color:#999;text-align:center;padding:2rem;">加载失败，请稍后刷新。</p>';
+        return;
+      }
 
       const posts = [];
       for (const file of files) {
-        const r = await fetch(`posts/${file}`);
-        const text = await r.text();
-        const { meta, body } = parseFrontmatter(text);
-        posts.push({ ...meta, body, file });
+        try {
+          const r = await fetch(`posts/${file}`);
+          if (!r.ok) throw new Error(`Failed to load ${file}`);
+          const text = await r.text();
+          const { meta, body } = parseFrontmatter(text);
+          if (!meta.date || !meta.title) continue;
+          posts.push({ ...meta, body, file });
+        } catch (e) {
+          continue;
+        }
       }
 
-      const timeline = document.getElementById('timeline');
+      if (!posts.length) {
+        timeline.innerHTML = '<p style="color:#999;text-align:center;padding:2rem;">暂无文章。</p>';
+        return;
+      }
+
       let lastYear = '';
 
       posts.forEach(post => {
@@ -253,7 +281,7 @@
         entry.innerHTML = `
           <div class="entry-date">${formatDate(post.date)}</div>
           <div class="entry-title"><a href="#">${post.title}</a></div>
-          <div class="entry-body">${marked.parse(post.body)}</div>
+          <div class="entry-body">${renderMarkdown(post.body)}</div>
           ${post.tags && post.tags.length ? `<div class="entry-tags">${post.tags.map(t => `<span>${t}</span>`).join('')}</div>` : ''}
         `;
 
