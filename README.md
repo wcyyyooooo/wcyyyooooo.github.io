@@ -18,7 +18,8 @@
 └── data/
     ├── books.json          # 书单数据
     ├── films.json          # 影单数据
-    └── music.json          # 歌单数据
+    ├── music.json          # 歌单数据
+    └── todos.json          # 待办列表
 ```
 
 ## 需要修改的地方
@@ -32,9 +33,18 @@
 | `.subtitle` | 副标题 |
 | `.header-links` 中的 `<a>` | GitHub、邮箱等链接 |
 | `<source src="music.mp3">` | 音乐文件路径 |
-| `.sidebar-left` 内的 `<li>` | 左侧待办列表 |
+### data/todos.json
 
-已完成的事项加上 `class="done"` 会显示删除线。
+```json
+{ "task": "读完《雪国》", "done": false }
+{ "task": "搭建这个博客", "done": true, "date": "2026-05-20" }
+```
+
+| 字段 | 说明 |
+|------|------|
+| `task` | 待办事项 |
+| `done` | `true` 已完成 / `false` 未完成 |
+| `date` | 完成日期 `YYYY-MM-DD`，仅 `done: true` 需要 |
 
 ### post.html
 

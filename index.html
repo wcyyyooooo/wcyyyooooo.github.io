@@ -405,19 +405,7 @@
 <div class="layout">
 
   <!-- ===== left: todo ===== -->
-  <aside class="sidebar-left">
-    <div class="panel">
-      <div class="panel-title">待办</div>
-      <ul class="panel-list">
-        <li>整理书房</li>
-        <li>读完《雪国》</li>
-        <li class="done">搭建这个博客</li>
-        <li>写一篇月度小结</li>
-        <li>整理电影清单</li>
-        <li class="done">学会做手冲咖啡</li>
-      </ul>
-    </div>
-  </aside>
+  <aside class="sidebar-left" id="sidebarLeft"></aside>
 
   <!-- ===== center ===== -->
   <div class="main">
@@ -604,6 +592,38 @@
 
   loadPosts();
   loadSidebar();
+  loadTodos();
+
+  async function loadTodos() {
+    try {
+      const r = await fetch('data/todos.json');
+      if (!r.ok) return;
+      const items = await r.json();
+
+      const undone = items.filter(i => !i.done);
+      const done = items.filter(i => i.done);
+      done.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+      const container = document.getElementById('sidebarLeft');
+      const div = document.createElement('div');
+      div.className = 'panel';
+
+      let html = '<div class="panel-title">待办</div><ul class="panel-list">';
+
+      undone.forEach(i => {
+        html += `<li>${i.task}</li>`;
+      });
+
+      done.forEach(i => {
+        const date = i.date ? ` <span style="color:#d0d7e0;font-size:0.65rem;">${i.date}</span>` : '';
+        html += `<li class="done">${i.task}${date}</li>`;
+      });
+
+      html += '</ul>';
+      div.innerHTML = html;
+      container.appendChild(div);
+    } catch (e) { /* skip */ }
+  }
 
   async function loadSidebar() {
     const container = document.getElementById('sidebarRight');
