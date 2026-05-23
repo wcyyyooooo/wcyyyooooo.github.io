@@ -13,59 +13,51 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background: #fafafa;
-    color: #333;
-    line-height: 1.8;
+    background: #f4f5f7;
+    color: #4a555e;
+    line-height: 1.85;
+    letter-spacing: 0.01em;
   }
 
   .header {
     max-width: 640px;
     margin: 0 auto;
-    padding: 4rem 1.5rem 2rem;
+    padding: 6rem 1.5rem 3rem;
     text-align: center;
   }
 
-  .avatar {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: #e8e8e8;
-    margin: 0 auto 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    color: #999;
-  }
-
   h1 {
-    font-size: 1.3rem;
-    font-weight: 500;
-    margin-bottom: 0.15rem;
+    font-size: 1.15rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: #6b7b8d;
+    margin-bottom: 0.5rem;
   }
 
   .subtitle {
-    font-size: 0.85rem;
-    color: #999;
-    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    color: #b0bac5;
+    letter-spacing: 0.06em;
+    margin-bottom: 1.2rem;
   }
 
   .header-links {
     display: flex;
     justify-content: center;
-    gap: 1.2rem;
+    gap: 1.6rem;
     flex-wrap: wrap;
   }
 
   .header-links a {
-    color: #999;
+    color: #b0bac5;
     text-decoration: none;
-    font-size: 0.85rem;
-    transition: color 0.2s;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    transition: color 0.3s;
   }
 
   .header-links a:hover {
-    color: #333;
+    color: #6b7b8d;
   }
 
   .tag-bar {
@@ -74,47 +66,48 @@
     padding: 0 1.5rem 1.5rem;
     display: flex;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
     flex-wrap: wrap;
   }
 
   .tag-btn {
-    font-size: 0.8rem;
-    color: #999;
+    font-size: 0.75rem;
+    color: #b0bac5;
     background: transparent;
-    border: 1px solid #e0e0e0;
-    border-radius: 14px;
+    border: 1px solid #dce3ea;
+    border-radius: 2px;
     padding: 2px 12px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s;
     font-family: inherit;
+    letter-spacing: 0.04em;
   }
 
   .tag-btn:hover {
-    color: #555;
-    border-color: #bbb;
+    color: #7b8fa1;
+    border-color: #c5ced8;
   }
 
   .tag-btn.active {
-    color: #333;
-    background: #e8e8e8;
-    border-color: #e8e8e8;
+    color: #5a6c7d;
+    background: #e8ecf1;
+    border-color: #e8ecf1;
   }
 
   .tag-count {
     padding-left: 2px;
-    color: #ccc;
-    font-size: 0.75rem;
+    color: #d0d7e0;
+    font-size: 0.72rem;
   }
 
   .tag-btn.active .tag-count {
-    color: #999;
+    color: #a0aebd;
   }
 
   .timeline {
     max-width: 640px;
     margin: 0 auto;
-    padding: 0 1.5rem 4rem;
+    padding: 0 1.5rem 5rem;
     position: relative;
   }
 
@@ -125,55 +118,58 @@
     top: 0;
     bottom: 0;
     width: 1px;
-    background: #e0e0e0;
+    background: #dce3ea;
   }
 
   .entry {
     position: relative;
     padding-left: 3.5rem;
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
   }
 
   .entry::before {
     content: "";
     position: absolute;
-    left: 1.85rem;
-    top: 0.55rem;
-    width: 8px;
-    height: 8px;
+    left: 1.8rem;
+    top: 0.5rem;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: #ccc;
+    border: 1px solid #c5ced8;
+    background: #f4f5f7;
   }
 
   .entry-date {
-    font-size: 0.8rem;
-    color: #bbb;
-    margin-bottom: 0.35rem;
+    font-size: 0.75rem;
+    color: #c0c9d4;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.03em;
   }
 
   .entry-title {
-    font-size: 1.05rem;
-    font-weight: 500;
-    margin-bottom: 0.3rem;
-    color: #333;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 0.35rem;
   }
 
   .entry-title a {
-    color: inherit;
+    color: #5a6c7d;
     text-decoration: none;
+    transition: color 0.3s;
   }
 
   .entry-title a:hover {
-    text-decoration: underline;
+    color: #3d4f60;
   }
 
   .entry-body {
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.85rem;
+    color: #8e9aab;
+    line-height: 1.75;
   }
 
   .entry-body p {
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.5rem;
   }
 
   .entry-body p:last-child {
@@ -181,38 +177,40 @@
   }
 
   .entry-tags {
-    margin-top: 0.5rem;
+    margin-top: 0.6rem;
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
   }
 
   .entry-tags span {
-    font-size: 0.75rem;
-    color: #aaa;
-    background: #f0f0f0;
+    font-size: 0.7rem;
+    color: #bcc5d0;
+    background: #eef1f5;
     padding: 1px 8px;
-    border-radius: 3px;
+    border-radius: 2px;
     cursor: pointer;
-    transition: color 0.15s, background 0.15s;
+    transition: color 0.3s, background 0.3s;
+    letter-spacing: 0.03em;
   }
 
   .entry-tags span:hover {
-    color: #555;
-    background: #e0e0e0;
+    color: #7b8fa1;
+    background: #e2e7ee;
   }
 
   .year-divider {
     padding-left: 1.5rem;
-    margin-bottom: 1.5rem;
-    font-size: 0.85rem;
-    color: #ccc;
-    font-weight: 500;
+    margin-bottom: 1.8rem;
+    font-size: 0.8rem;
+    color: #d0d7e0;
+    font-weight: 400;
+    letter-spacing: 0.06em;
   }
 
   @media (max-width: 480px) {
     .header {
-      padding-top: 2.5rem;
+      padding-top: 3.5rem;
     }
     .timeline::before {
       left: 1.25rem;
@@ -221,7 +219,7 @@
       padding-left: 2.5rem;
     }
     .entry::before {
-      left: 1.1rem;
+      left: 1.05rem;
     }
     .year-divider {
       padding-left: 0.75rem;
@@ -235,13 +233,11 @@
 </head>
 <body>
   <div class="header">
-    <div class="avatar">W</div>
     <h1>wcyyyooooo</h1>
-    <p class="subtitle">写点东西，记录生活</p>
+    <p class="subtitle">安静地写一些东西</p>
     <div class="header-links">
       <a href="https://github.com/wcyyyooooo">GitHub</a>
-      <a href="mailto:2812001079@qq.com">Email</a>
-      <a href="#">RSS</a>
+      <a href="mailto:2812001079@qq.com">Mail</a>
     </div>
   </div>
 
@@ -325,7 +321,7 @@
       timeline.innerHTML = '';
 
       if (!posts.length) {
-        timeline.innerHTML = '<p style="color:#ccc;text-align:center;padding:2rem;font-size:0.85rem;">没有匹配的文章</p>';
+        timeline.innerHTML = '<p style="color:#c0c9d4;text-align:center;padding:2rem;font-size:0.8rem;">没有匹配的文章</p>';
         return;
       }
 
@@ -373,7 +369,7 @@
         if (!res.ok) throw new Error('Failed to load post list');
         files = await res.json();
       } catch (e) {
-        timeline.innerHTML = '<p style="color:#999;text-align:center;padding:2rem;">加载失败，请稍后刷新。</p>';
+        timeline.innerHTML = '<p style="color:#b0bac5;text-align:center;padding:2rem;">加载失败，请稍后刷新。</p>';
         return;
       }
 
@@ -391,7 +387,7 @@
       }
 
       if (!allPosts.length) {
-        timeline.innerHTML = '<p style="color:#999;text-align:center;padding:2rem;">暂无文章。</p>';
+        timeline.innerHTML = '<p style="color:#b0bac5;text-align:center;padding:2rem;">暂无文章。</p>';
         return;
       }
 
