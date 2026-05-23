@@ -5,13 +5,20 @@
 ## 结构
 
 ```
-├── index.html          # 首页（时间线）
+├── index.html          # 首页（时间线 + 侧栏）
 ├── post.html           # 独立文章页
+├── lists.html          # 完整书单
+├── films.html          # 完整影单
+├── music-list.html     # 完整歌单
 ├── music.mp3           # 背景音乐（可选）
 ├── .nojekyll           # 禁止 Jekyll 处理
-└── posts/
-    ├── index.json          # 文章清单
-    └── YYYY-MM-DD-slug.md  # 文章文件
+├── posts/
+│   ├── index.json          # 文章清单
+│   └── YYYY-MM-DD-slug.md  # 文章文件
+└── data/
+    ├── books.json          # 书单数据
+    ├── films.json          # 影单数据
+    └── music.json          # 歌单数据
 ```
 
 ## 需要修改的地方
@@ -26,7 +33,6 @@
 | `.header-links` 中的 `<a>` | GitHub、邮箱等链接 |
 | `<source src="music.mp3">` | 音乐文件路径 |
 | `.sidebar-left` 内的 `<li>` | 左侧待办列表 |
-| `.sidebar-right` 内的 `<li>` | 右侧书单 / 影单 |
 
 已完成的事项加上 `class="done"` 会显示删除线。
 
@@ -43,6 +49,45 @@
 ### music.mp3
 
 将你的 `.mp3` 文件放在根目录命名为 `music.mp3`，或修改 `index.html` 中 `<source>` 的路径。
+
+### data/books.json
+
+```json
+{ "title": "挪威的森林", "author": "村上春树", "status": "reading" }
+{ "title": "围城", "author": "钱锺书", "status": "read", "date": "2026-05-10" }
+```
+
+| 字段 | 说明 |
+|------|------|
+| `title` | 书名 |
+| `author` | 作者 |
+| `status` | `"reading"` 在读 / `"read"` 读过 |
+| `date` | 读完日期 `YYYY-MM-DD`，仅 `"read"` 需要 |
+
+### data/films.json
+
+```json
+{ "title": "驾驶我的车", "director": "滨口龙介", "status": "watched", "date": "2026-05-01" }
+{ "title": "双峰", "director": "大卫·林奇", "status": "watching" }
+```
+
+| 字段 | 说明 |
+|------|------|
+| `title` | 片名 |
+| `director` | 导演 |
+| `status` | `"watching"` 在看 / `"watched"` 看过 |
+| `date` | 看完日期 `YYYY-MM-DD`，仅 `"watched"` 需要 |
+
+### data/music.json
+
+```json
+{ "title": "Clair de Lune", "artist": "Debussy" }
+```
+
+| 字段 | 说明 |
+|------|------|
+| `title` | 曲名 |
+| `artist` | 艺术家 |
 
 ## 发布文章
 
