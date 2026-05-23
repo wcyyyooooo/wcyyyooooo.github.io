@@ -88,6 +88,16 @@
 | `status` | `"watching"` 在看 / `"watched"` 看过 |
 | `date` | 看完日期 `YYYY-MM-DD`，仅 `"watched"` 需要 |
 
+### data/goals.json
+
+```json
+{ "goal": "去冰岛看极光" }
+```
+
+| 字段 | 说明 |
+|------|------|
+| `goal` | 目标描述 |
+
 ### data/music.json
 
 ```json
