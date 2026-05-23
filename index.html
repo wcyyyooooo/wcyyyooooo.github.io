@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>个人主页</title>
+<title>wcyyyooooo</title>
 <style>
   * {
     margin: 0;
@@ -13,96 +13,228 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
     background: #fafafa;
     color: #333;
-    line-height: 1.6;
+    line-height: 1.8;
   }
 
-  .container {
+  .header {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 2rem;
     text-align: center;
-    padding: 2rem;
-    max-width: 480px;
   }
 
   .avatar {
-    width: 80px;
-    height: 80px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
-    background: #e0e0e0;
-    margin: 0 auto 1.5rem;
+    background: #e8e8e8;
+    margin: 0 auto 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    font-size: 1.4rem;
     color: #999;
   }
 
   h1 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 500;
-    letter-spacing: 0.02em;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.15rem;
   }
 
   .subtitle {
-    font-size: 0.9rem;
-    color: #888;
-    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    color: #999;
+    margin-bottom: 0.5rem;
   }
 
-  .bio {
-    font-size: 0.95rem;
-    color: #666;
-    margin-bottom: 2rem;
-  }
-
-  .links {
+  .header-links {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
+    gap: 1.2rem;
     flex-wrap: wrap;
   }
 
-  .links a {
-    color: #555;
+  .header-links a {
+    color: #999;
     text-decoration: none;
-    font-size: 0.9rem;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 2px;
-    transition: color 0.2s, border-color 0.2s;
+    font-size: 0.85rem;
+    transition: color 0.2s;
   }
 
-  .links a:hover {
-    color: #000;
-    border-color: #999;
+  .header-links a:hover {
+    color: #333;
   }
 
-  .footer {
-    margin-top: 3rem;
+  /* Timeline */
+  .timeline {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+    position: relative;
+  }
+
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 2rem;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #e0e0e0;
+  }
+
+  .entry {
+    position: relative;
+    padding-left: 3.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .entry::before {
+    content: "";
+    position: absolute;
+    left: 1.85rem;
+    top: 0.55rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ccc;
+  }
+
+  .entry-date {
     font-size: 0.8rem;
     color: #bbb;
+    margin-bottom: 0.35rem;
+  }
+
+  .entry-title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+    color: #333;
+  }
+
+  .entry-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .entry-title a:hover {
+    text-decoration: underline;
+  }
+
+  .entry-body {
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .entry-body p {
+    margin-bottom: 0.6rem;
+  }
+
+  .entry-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .entry-tags {
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .entry-tags span {
+    font-size: 0.75rem;
+    color: #aaa;
+    background: #f0f0f0;
+    padding: 1px 8px;
+    border-radius: 3px;
+  }
+
+  .year-divider {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    color: #ccc;
+    font-weight: 500;
+  }
+
+  @media (max-width: 480px) {
+    .header {
+      padding-top: 2.5rem;
+    }
+    .timeline::before {
+      left: 1.25rem;
+    }
+    .entry {
+      padding-left: 2.5rem;
+    }
+    .entry::before {
+      left: 1.1rem;
+    }
+    .year-divider {
+      padding-left: 0.75rem;
+    }
   }
 </style>
 </head>
 <body>
-  <div class="container">
+  <div class="header">
     <div class="avatar">W</div>
-    <h1>你的名字</h1>
-    <p class="subtitle">开发者 / 设计师 / 写作者</p>
-    <p class="bio">
-      在这里写一段简短的自我介绍。你喜欢做什么，在做什么，或者什么都不写，保持空白也很好。
-    </p>
-    <div class="links">
-      <a href="https://github.com">GitHub</a>
-      <a href="mailto:hello@example.com">Email</a>
-      <a href="#">Blog</a>
-      <a href="#">Twitter</a>
+    <h1>wcyyyooooo</h1>
+    <p class="subtitle">写点东西，记录生活</p>
+    <div class="header-links">
+      <a href="https://github.com/wcyyyooooo">GitHub</a>
+      <a href="mailto:2812001079@qq.com">Email</a>
+      <a href="#">RSS</a>
     </div>
-    <p class="footer">&copy; 2026</p>
+  </div>
+
+  <div class="timeline">
+
+    <div class="year-divider">2026</div>
+
+    <div class="entry">
+      <div class="entry-date">5 月 20 日</div>
+      <div class="entry-title">
+        <a href="#">搭建了这个博客</a>
+      </div>
+      <div class="entry-body">
+        <p>用纯 HTML 写了一个极简的个人主页，没有框架，没有构建工具，干干净净。托管在 GitHub Pages，写好就上线。</p>
+      </div>
+      <div class="entry-tags">
+        <span>博客</span>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-date">4 月 15 日</div>
+      <div class="entry-title">
+        <a href="#">最近在读的书</a>
+      </div>
+      <div class="entry-body">
+        <p>整理了一下最近在看的几本书，有些读完了，有些还在缓慢推进。阅读是个长期的事情，不急。</p>
+      </div>
+      <div class="entry-tags">
+        <span>阅读</span>
+        <span>书单</span>
+      </div>
+    </div>
+
+    <div class="year-divider">2025</div>
+
+    <div class="entry">
+      <div class="entry-date">12 月 10 日</div>
+      <div class="entry-title">
+        <a href="#">Hello World</a>
+      </div>
+      <div class="entry-body">
+        <p>一切从这里开始。</p>
+      </div>
+    </div>
+
   </div>
 </body>
 </html>
