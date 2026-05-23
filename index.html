@@ -68,6 +68,49 @@
     color: #333;
   }
 
+  .tag-bar {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 1.5rem 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tag-btn {
+    font-size: 0.8rem;
+    color: #999;
+    background: transparent;
+    border: 1px solid #e0e0e0;
+    border-radius: 14px;
+    padding: 2px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .tag-btn:hover {
+    color: #555;
+    border-color: #bbb;
+  }
+
+  .tag-btn.active {
+    color: #333;
+    background: #e8e8e8;
+    border-color: #e8e8e8;
+  }
+
+  .tag-count {
+    padding-left: 2px;
+    color: #ccc;
+    font-size: 0.75rem;
+  }
+
+  .tag-btn.active .tag-count {
+    color: #999;
+  }
+
   .timeline {
     max-width: 640px;
     margin: 0 auto;
@@ -150,6 +193,13 @@
     background: #f0f0f0;
     padding: 1px 8px;
     border-radius: 3px;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .entry-tags span:hover {
+    color: #555;
+    background: #e0e0e0;
   }
 
   .year-divider {
@@ -176,6 +226,10 @@
     .year-divider {
       padding-left: 0.75rem;
     }
+    .tag-bar {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
   }
 </style>
 </head>
@@ -191,6 +245,7 @@
     </div>
   </div>
 
+  <div class="tag-bar" id="tagBar"></div>
   <div class="timeline" id="timeline"></div>
 
   <script>
@@ -230,35 +285,47 @@
       return new Date(dateStr).getFullYear().toString();
     }
 
-    async function loadPosts() {
+    let allPosts = [];
+    let activeTag = null;
+
+    function buildTagBar() {
+      const counts = {};
+      allPosts.forEach(p => {
+        (p.tags || []).forEach(t => {
+          counts[t] = (counts[t] || 0) + 1;
+        });
+      });
+
+      const bar = document.getElementById('tagBar');
+      bar.innerHTML = '';
+
+      const allBtn = document.createElement('button');
+      allBtn.className = 'tag-btn' + (activeTag === null ? ' active' : '');
+      allBtn.textContent = '全部';
+      allBtn.addEventListener('click', () => filterBy(null));
+      bar.appendChild(allBtn);
+
+      Object.entries(counts).forEach(([tag, count]) => {
+        const btn = document.createElement('button');
+        btn.className = 'tag-btn' + (activeTag === tag ? ' active' : '');
+        btn.innerHTML = `${tag}<span class="tag-count">${count}</span>`;
+        btn.addEventListener('click', () => filterBy(activeTag === tag ? null : tag));
+        bar.appendChild(btn);
+      });
+    }
+
+    function filterBy(tag) {
+      activeTag = tag;
+      buildTagBar();
+      renderTimeline(tag ? allPosts.filter(p => (p.tags || []).includes(tag)) : allPosts);
+    }
+
+    function renderTimeline(posts) {
       const timeline = document.getElementById('timeline');
-
-      let files;
-      try {
-        const res = await fetch('posts/index.json');
-        if (!res.ok) throw new Error('Failed to load post list');
-        files = await res.json();
-      } catch (e) {
-        timeline.innerHTML = '<p style="color:#999;text-align:center;padding:2rem;">加载失败，请稍后刷新。</p>';
-        return;
-      }
-
-      const posts = [];
-      for (const file of files) {
-        try {
-          const r = await fetch(`posts/${file}`);
-          if (!r.ok) throw new Error(`Failed to load ${file}`);
-          const text = await r.text();
-          const { meta, body } = parseFrontmatter(text);
-          if (!meta.date || !meta.title) continue;
-          posts.push({ ...meta, body, file });
-        } catch (e) {
-          continue;
-        }
-      }
+      timeline.innerHTML = '';
 
       if (!posts.length) {
-        timeline.innerHTML = '<p style="color:#999;text-align:center;padding:2rem;">暂无文章。</p>';
+        timeline.innerHTML = '<p style="color:#ccc;text-align:center;padding:2rem;font-size:0.85rem;">没有匹配的文章</p>';
         return;
       }
 
@@ -278,15 +345,58 @@
         const entry = document.createElement('div');
         entry.className = 'entry';
 
+        const tagsHtml = post.tags && post.tags.length
+          ? `<div class="entry-tags">${post.tags.map(t => `<span class="tag-link" data-tag="${t}">${t}</span>`).join('')}</div>`
+          : '';
+
         entry.innerHTML = `
           <div class="entry-date">${formatDate(post.date)}</div>
           <div class="entry-title"><a href="#">${post.title}</a></div>
           <div class="entry-body">${renderMarkdown(post.body)}</div>
-          ${post.tags && post.tags.length ? `<div class="entry-tags">${post.tags.map(t => `<span>${t}</span>`).join('')}</div>` : ''}
+          ${tagsHtml}
         `;
+
+        entry.querySelectorAll('.tag-link').forEach(el => {
+          el.addEventListener('click', () => filterBy(el.dataset.tag));
+        });
 
         timeline.appendChild(entry);
       });
+    }
+
+    async function loadPosts() {
+      const timeline = document.getElementById('timeline');
+
+      let files;
+      try {
+        const res = await fetch('posts/index.json');
+        if (!res.ok) throw new Error('Failed to load post list');
+        files = await res.json();
+      } catch (e) {
+        timeline.innerHTML = '<p style="color:#999;text-align:center;padding:2rem;">加载失败，请稍后刷新。</p>';
+        return;
+      }
+
+      for (const file of files) {
+        try {
+          const r = await fetch(`posts/${file}`);
+          if (!r.ok) throw new Error(`Failed to load ${file}`);
+          const text = await r.text();
+          const { meta, body } = parseFrontmatter(text);
+          if (!meta.date || !meta.title) continue;
+          allPosts.push({ ...meta, body, file });
+        } catch (e) {
+          continue;
+        }
+      }
+
+      if (!allPosts.length) {
+        timeline.innerHTML = '<p style="color:#999;text-align:center;padding:2rem;">暂无文章。</p>';
+        return;
+      }
+
+      buildTagBar();
+      renderTimeline(allPosts);
     }
 
     loadPosts();
