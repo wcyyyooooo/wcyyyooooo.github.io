@@ -43,18 +43,6 @@
     border-bottom: 1px solid #dce3ea;
   }
 
-  .subsection {
-    margin-bottom: 1.5rem;
-  }
-
-  .subsection-title {
-    font-size: 0.72rem;
-    color: #b0bac5;
-    letter-spacing: 0.06em;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-  }
-
   .list {
     list-style: none;
   }
@@ -83,20 +71,24 @@
   <div class="container">
     <a class="back" href="/">&larr; 返回</a>
     <h2 class="section-title">歌单</h2>
-
-    <div class="subsection">
-      <div class="subsection-title">在听</div>
-      <ul class="list">
-        <li>Merry Christmas Mr. Lawrence <span class="meta">坂本龙一</span></li>
-        <li>Gymnopédie No.1 <span class="meta">Satie</span></li>
-        <li>海の見える街 <span class="meta">久石譲</span></li>
-        <li>Nuvole Bianche <span class="meta">Ludovico Einaudi</span></li>
-        <li>Clair de Lune <span class="meta">Debussy</span></li>
-        <li>Comptine d'un autre été <span class="meta">Yann Tiersen</span></li>
-        <li>The Crisis <span class="meta">Ennio Morricone</span></li>
-        <li>Golden Hour <span class="meta">Johan Gunnarsson</span></li>
-      </ul>
-    </div>
+    <ul class="list" id="musicList"><li>加载中…</li></ul>
   </div>
+
+  <script>
+    async function load() {
+      try {
+        const r = await fetch('data/music.json');
+        const items = await r.json();
+
+        document.getElementById('musicList').innerHTML = items.length
+          ? items.map(i => `<li>${i.title}${i.artist ? '<span class="meta">' + i.artist + '</span>' : ''}</li>`).join('')
+          : '<li style="color:#c5ced8;">暂无</li>';
+      } catch (e) {
+        document.getElementById('musicList').innerHTML = '<li style="color:#c5ced8;">加载失败</li>';
+      }
+    }
+
+    load();
+  </script>
 </body>
 </html>

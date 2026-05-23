@@ -77,6 +77,13 @@
     color: #bcc5d0;
     margin-left: 0.4rem;
   }
+
+  .list li .date {
+    float: right;
+    font-size: 0.7rem;
+    color: #c5ced8;
+    letter-spacing: 0.04em;
+  }
 </style>
 </head>
 <body>
@@ -86,26 +93,43 @@
 
     <div class="subsection">
       <div class="subsection-title">在读</div>
-      <ul class="list">
-        <li>雪国 <span class="meta">川端康成</span></li>
-        <li>夜晚的潜水艇 <span class="meta">陈春成</span></li>
-        <li>都柏林人 <span class="meta">乔伊斯</span></li>
-      </ul>
+      <ul class="list" id="readingList"><li>加载中…</li></ul>
     </div>
 
     <div class="subsection">
       <div class="subsection-title">读过</div>
-      <ul class="list">
-        <li>挪威的森林 <span class="meta">村上春树</span></li>
-        <li>局外人 <span class="meta">加缪</span></li>
-        <li>月亮与六便士 <span class="meta">毛姆</span></li>
-        <li>围城 <span class="meta">钱锺书</span></li>
-        <li>百年孤独 <span class="meta">马尔克斯</span></li>
-        <li>活着 <span class="meta">余华</span></li>
-        <li>1984 <span class="meta">奥威尔</span></li>
-        <li>人类群星闪耀时 <span class="meta">茨威格</span></li>
-      </ul>
+      <ul class="list" id="readList"><li>加载中…</li></ul>
     </div>
   </div>
+
+  <script>
+    function renderItem(i) {
+      const date = i.date ? `<span class="date">${i.date}</span>` : '';
+      return `<li>${i.title}${i.author ? '<span class="meta">' + i.author + '</span>' : ''}${date}</li>`;
+    }
+
+    async function load() {
+      try {
+        const r = await fetch('data/books.json');
+        const items = await r.json();
+
+        const reading = items.filter(i => i.status === 'reading');
+        const read = items.filter(i => i.status === 'read');
+        read.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+        document.getElementById('readingList').innerHTML = reading.length
+          ? reading.map(renderItem).join('')
+          : '<li style="color:#c5ced8;">暂无</li>';
+
+        document.getElementById('readList').innerHTML = read.length
+          ? read.map(renderItem).join('')
+          : '<li style="color:#c5ced8;">暂无</li>';
+      } catch (e) {
+        document.getElementById('readingList').innerHTML = '<li style="color:#c5ced8;">加载失败</li>';
+      }
+    }
+
+    load();
+  </script>
 </body>
 </html>

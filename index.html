@@ -434,64 +434,8 @@
     <div class="timeline" id="timeline"></div>
   </div>
 
-  <!-- ===== right: books & films ===== -->
-  <aside class="sidebar-right">
-    <div class="panel">
-      <div class="panel-title">书</div>
-      <div class="panel-section">
-        <div class="panel-section-title">在读</div>
-        <ul class="panel-list">
-          <li>雪国 · 川端康成</li>
-          <li>夜晚的潜水艇</li>
-          <li>都柏林人</li>
-        </ul>
-      </div>
-      <div class="panel-section">
-        <div class="panel-section-title">读过</div>
-        <ul class="panel-list">
-          <li>挪威的森林</li>
-          <li>局外人</li>
-          <li>月亮与六便士</li>
-          <li>围城</li>
-        </ul>
-      </div>
-      <a class="panel-more" href="lists.html">查看更多 &rarr;</a>
-    </div>
-
-    <div class="panel" style="margin-top:2.5rem;">
-      <div class="panel-title">影</div>
-      <div class="panel-section">
-        <div class="panel-section-title">在看</div>
-        <ul class="panel-list">
-          <li>双峰</li>
-        </ul>
-      </div>
-      <div class="panel-section">
-        <div class="panel-section-title">看过</div>
-        <ul class="panel-list">
-          <li>驾驶我的车</li>
-          <li>燃烧女子的肖像</li>
-          <li>海边的曼彻斯特</li>
-          <li>重庆森林</li>
-        </ul>
-      </div>
-      <a class="panel-more" href="films.html">查看更多 &rarr;</a>
-    </div>
-
-    <div class="panel" style="margin-top:2.5rem;">
-      <div class="panel-title">歌</div>
-      <div class="panel-section">
-        <div class="panel-section-title">在听</div>
-        <ul class="panel-list">
-          <li>Merry Christmas Mr. Lawrence</li>
-          <li>Gymnopédie No.1</li>
-          <li>海の見える街</li>
-          <li>Nuvole Bianche</li>
-        </ul>
-      </div>
-      <a class="panel-more" href="music-list.html">查看更多 &rarr;</a>
-    </div>
-  </aside>
+  <!-- ===== right: books & films & music ===== -->
+  <aside class="sidebar-right" id="sidebarRight"></aside>
 
 </div>
 
@@ -659,6 +603,64 @@
   }
 
   loadPosts();
+  loadSidebar();
+
+  async function loadSidebar() {
+    const container = document.getElementById('sidebarRight');
+
+    const panels = [
+      { title: '书', file: 'data/books.json', listPage: 'lists.html', statusLabel: { active: '在读', done: '读过' }, creatorKey: 'author' },
+      { title: '影', file: 'data/films.json', listPage: 'films.html', statusLabel: { active: '在看', done: '看过' }, creatorKey: 'director' },
+      { title: '歌', file: 'data/music.json', listPage: 'music-list.html', statusLabel: null, creatorKey: 'artist' }
+    ];
+
+    for (const p of panels) {
+      try {
+        const r = await fetch(p.file);
+        if (!r.ok) continue;
+        const items = await r.json();
+
+        const active = p.statusLabel ? items.filter(i => i.status === 'reading' || i.status === 'watching') : [];
+        const done = items.filter(i => i.status === 'read' || i.status === 'watched');
+        done.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+        const shown = [...active, ...done.slice(0, 4)];
+
+        const div = document.createElement('div');
+        div.className = 'panel';
+
+        let html = `<div class="panel-title">${p.title}</div>`;
+
+        if (p.statusLabel) {
+          if (active.length) {
+            html += `<div class="panel-section"><div class="panel-section-title">${p.statusLabel.active}</div><ul class="panel-list">`;
+            active.forEach(i => { html += `<li>${i.title}${i[p.creatorKey] ? ' &middot; ' + i[p.creatorKey] : ''}</li>`; });
+            html += `</ul></div>`;
+          }
+          if (done.length) {
+            html += `<div class="panel-section"><div class="panel-section-title">${p.statusLabel.done}</div><ul class="panel-list">`;
+            shown.filter(i => i.status === 'read' || i.status === 'watched').forEach(i => {
+              const date = i.date ? ` <span style="color:#d0d7e0;font-size:0.65rem;">${i.date.slice(0,7)}</span>` : '';
+              html += `<li>${i.title}${i[p.creatorKey] ? ' &middot; ' + i[p.creatorKey] : ''}${date}</li>`;
+            });
+            html += `</ul></div>`;
+          }
+        } else {
+          html += `<div class="panel-section"><ul class="panel-list">`;
+          shown.slice(0, 4).forEach(i => { html += `<li>${i.title}${i[p.creatorKey] ? ' &middot; ' + i[p.creatorKey] : ''}</li>`; });
+          html += `</ul></div>`;
+        }
+
+        html += `<a class="panel-more" href="${p.listPage}">查看更多 &rarr;</a>`;
+        div.innerHTML = html;
+        if (container.children.length) {
+          const gap = document.createElement('div');
+          gap.style.marginBottom = '2.5rem';
+          container.appendChild(gap);
+        }
+        container.appendChild(div);
+      } catch (e) { /* skip */ }
+    }
+  }
 
   const audio = document.getElementById('audio');
   const btn = document.getElementById('playerBtn');

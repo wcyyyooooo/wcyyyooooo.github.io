@@ -77,6 +77,13 @@
     color: #bcc5d0;
     margin-left: 0.4rem;
   }
+
+  .list li .date {
+    float: right;
+    font-size: 0.7rem;
+    color: #c5ced8;
+    letter-spacing: 0.04em;
+  }
 </style>
 </head>
 <body>
@@ -86,24 +93,43 @@
 
     <div class="subsection">
       <div class="subsection-title">在看</div>
-      <ul class="list">
-        <li>双峰 <span class="meta">大卫·林奇</span></li>
-      </ul>
+      <ul class="list" id="watchingList"><li>加载中…</li></ul>
     </div>
 
     <div class="subsection">
       <div class="subsection-title">看过</div>
-      <ul class="list">
-        <li>驾驶我的车 <span class="meta">滨口龙介</span></li>
-        <li>燃烧女子的肖像 <span class="meta">瑟琳·席安玛</span></li>
-        <li>海边的曼彻斯特 <span class="meta">肯尼斯·罗纳根</span></li>
-        <li>重庆森林 <span class="meta">王家卫</span></li>
-        <li>小森林 <span class="meta">森淳一</span></li>
-        <li>海街日记 <span class="meta">是枝裕和</span></li>
-        <li>燃烧 <span class="meta">李沧东</span></li>
-        <li>一一 <span class="meta">杨德昌</span></li>
-      </ul>
+      <ul class="list" id="watchedList"><li>加载中…</li></ul>
     </div>
   </div>
+
+  <script>
+    function renderItem(i) {
+      const date = i.date ? `<span class="date">${i.date}</span>` : '';
+      return `<li>${i.title}${i.director ? '<span class="meta">' + i.director + '</span>' : ''}${date}</li>`;
+    }
+
+    async function load() {
+      try {
+        const r = await fetch('data/films.json');
+        const items = await r.json();
+
+        const watching = items.filter(i => i.status === 'watching');
+        const watched = items.filter(i => i.status === 'watched');
+        watched.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+        document.getElementById('watchingList').innerHTML = watching.length
+          ? watching.map(renderItem).join('')
+          : '<li style="color:#c5ced8;">暂无</li>';
+
+        document.getElementById('watchedList').innerHTML = watched.length
+          ? watched.map(renderItem).join('')
+          : '<li style="color:#c5ced8;">暂无</li>';
+      } catch (e) {
+        document.getElementById('watchingList').innerHTML = '<li style="color:#c5ced8;">加载失败</li>';
+      }
+    }
+
+    load();
+  </script>
 </body>
 </html>
