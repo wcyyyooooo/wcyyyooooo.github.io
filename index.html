@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>wcyyyooooo</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
   * {
     margin: 0;
@@ -68,7 +69,6 @@
     color: #333;
   }
 
-  /* Timeline */
   .timeline {
     max-width: 640px;
     margin: 0 auto;
@@ -192,49 +192,76 @@
     </div>
   </div>
 
-  <div class="timeline">
+  <div class="timeline" id="timeline"></div>
 
-    <div class="year-divider">2026</div>
+  <script>
+    function parseFrontmatter(text) {
+      const match = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+      if (!match) return { meta: {}, body: text };
+      const meta = {};
+      match[1].split('\n').forEach(line => {
+        const [key, ...rest] = line.split(':');
+        if (key && rest.length) {
+          let val = rest.join(':').trim();
+          if (val.startsWith('[') && val.endsWith(']')) {
+            val = val.slice(1, -1).split(',').map(s => s.trim()).filter(Boolean);
+          }
+          meta[key.trim()] = val;
+        }
+      });
+      return { meta, body: match[2].trim() };
+    }
 
-    <div class="entry">
-      <div class="entry-date">5 月 20 日</div>
-      <div class="entry-title">
-        <a href="#">搭建了这个博客</a>
-      </div>
-      <div class="entry-body">
-        <p>用纯 HTML 写了一个极简的个人主页，没有框架，没有构建工具，干干净净。托管在 GitHub Pages，写好就上线。</p>
-      </div>
-      <div class="entry-tags">
-        <span>博客</span>
-      </div>
-    </div>
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      return `${d.getFullYear()} 年 ${d.getMonth() + 1} 月 ${d.getDate()} 日`;
+    }
 
-    <div class="entry">
-      <div class="entry-date">4 月 15 日</div>
-      <div class="entry-title">
-        <a href="#">最近在读的书</a>
-      </div>
-      <div class="entry-body">
-        <p>整理了一下最近在看的几本书，有些读完了，有些还在缓慢推进。阅读是个长期的事情，不急。</p>
-      </div>
-      <div class="entry-tags">
-        <span>阅读</span>
-        <span>书单</span>
-      </div>
-    </div>
+    function yearFromDate(dateStr) {
+      return new Date(dateStr).getFullYear().toString();
+    }
 
-    <div class="year-divider">2025</div>
+    async function loadPosts() {
+      const res = await fetch('posts/index.json');
+      const files = await res.json();
 
-    <div class="entry">
-      <div class="entry-date">12 月 10 日</div>
-      <div class="entry-title">
-        <a href="#">Hello World</a>
-      </div>
-      <div class="entry-body">
-        <p>一切从这里开始。</p>
-      </div>
-    </div>
+      const posts = [];
+      for (const file of files) {
+        const r = await fetch(`posts/${file}`);
+        const text = await r.text();
+        const { meta, body } = parseFrontmatter(text);
+        posts.push({ ...meta, body, file });
+      }
 
-  </div>
+      const timeline = document.getElementById('timeline');
+      let lastYear = '';
+
+      posts.forEach(post => {
+        const year = yearFromDate(post.date);
+
+        if (year !== lastYear) {
+          const div = document.createElement('div');
+          div.className = 'year-divider';
+          div.textContent = year;
+          timeline.appendChild(div);
+          lastYear = year;
+        }
+
+        const entry = document.createElement('div');
+        entry.className = 'entry';
+
+        entry.innerHTML = `
+          <div class="entry-date">${formatDate(post.date)}</div>
+          <div class="entry-title"><a href="#">${post.title}</a></div>
+          <div class="entry-body">${marked.parse(post.body)}</div>
+          ${post.tags && post.tags.length ? `<div class="entry-tags">${post.tags.map(t => `<span>${t}</span>`).join('')}</div>` : ''}
+        `;
+
+        timeline.appendChild(entry);
+      });
+    }
+
+    loadPosts();
+  </script>
 </body>
 </html>
