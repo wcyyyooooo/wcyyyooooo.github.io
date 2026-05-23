@@ -25,6 +25,10 @@
 | `.subtitle` | 副标题 |
 | `.header-links` 中的 `<a>` | GitHub、邮箱等链接 |
 | `<source src="music.mp3">` | 音乐文件路径 |
+| `.sidebar-left` 内的 `<li>` | 左侧待办列表 |
+| `.sidebar-right` 内的 `<li>` | 右侧书单 / 影单 |
+
+已完成的事项加上 `class="done"` 会显示删除线。
 
 ### post.html
 
