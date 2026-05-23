@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歌单</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #f4f5f7;
+    color: #4a555e;
+    line-height: 1.9;
+    letter-spacing: 0.01em;
+  }
+
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 5rem;
+  }
+
+  .back {
+    display: inline-block;
+    font-size: 0.78rem;
+    color: #b0bac5;
+    text-decoration: none;
+    margin-bottom: 2.5rem;
+    letter-spacing: 0.04em;
+    transition: color 0.3s;
+  }
+
+  .back:hover { color: #6b7b8d; }
+
+  .section-title {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #6b7b8d;
+    letter-spacing: 0.06em;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dce3ea;
+  }
+
+  .subsection {
+    margin-bottom: 1.5rem;
+  }
+
+  .subsection-title {
+    font-size: 0.72rem;
+    color: #b0bac5;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .list {
+    list-style: none;
+  }
+
+  .list li {
+    font-size: 0.85rem;
+    color: #6b7b8d;
+    padding: 0.3rem 0;
+    letter-spacing: 0.03em;
+    line-height: 1.7;
+  }
+
+  .list li::before {
+    content: "— ";
+    color: #dce3ea;
+  }
+
+  .list li .meta {
+    font-size: 0.72rem;
+    color: #bcc5d0;
+    margin-left: 0.4rem;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <a class="back" href="/">&larr; 返回</a>
+    <h2 class="section-title">歌单</h2>
+
+    <div class="subsection">
+      <div class="subsection-title">在听</div>
+      <ul class="list">
+        <li>Merry Christmas Mr. Lawrence <span class="meta">坂本龙一</span></li>
+        <li>Gymnopédie No.1 <span class="meta">Satie</span></li>
+        <li>海の見える街 <span class="meta">久石譲</span></li>
+        <li>Nuvole Bianche <span class="meta">Ludovico Einaudi</span></li>
+        <li>Clair de Lune <span class="meta">Debussy</span></li>
+        <li>Comptine d'un autre été <span class="meta">Yann Tiersen</span></li>
+        <li>The Crisis <span class="meta">Ennio Morricone</span></li>
+        <li>Golden Hour <span class="meta">Johan Gunnarsson</span></li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
