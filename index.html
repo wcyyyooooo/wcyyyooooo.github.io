@@ -368,7 +368,11 @@
 
   /* ---- sidebar toggle for mobile ---- */
 
-  .sidebar-toggle {
+  .mobile-toggle {
+    display: none;
+  }
+
+  .mobile-panels {
     display: none;
   }
 
@@ -387,6 +391,34 @@
 
     .main {
       grid-column: 1;
+    }
+
+    .mobile-toggle {
+      display: block;
+      position: absolute;
+      top: 0.8rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      color: #b0bac5;
+      cursor: pointer;
+      padding: 0.3rem 0.5rem;
+      letter-spacing: 0.04em;
+    }
+
+    .mobile-panels {
+      padding: 0 1.5rem 1.5rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .mobile-panels.open {
+      display: block;
+    }
+
+    .mobile-panels .panel {
+      margin-bottom: 1.5rem;
     }
   }
 
@@ -419,6 +451,7 @@
   <!-- ===== center ===== -->
   <div class="main">
     <div class="header">
+      <button class="mobile-toggle" id="mobileToggle" aria-label="菜单">···</button>
       <img class="avatar" src="头像.jpg" alt="avatar" onerror="this.style.display='none'">
       <h1>nullptr</h1>
       <p class="subtitle">伟大生活的流水账</p>
@@ -427,6 +460,8 @@
         <a href="mailto:2812001079@qq.com">Mail</a>
       </div>
     </div>
+
+    <div class="mobile-panels" id="mobilePanels"></div>
 
     <div class="tag-bar" id="tagBar"></div>
     <div class="timeline" id="timeline"></div>
@@ -604,6 +639,18 @@
   loadSidebar();
   loadTodos();
   loadGoals();
+
+  document.getElementById('mobileToggle').addEventListener('click', () => {
+    const panels = document.getElementById('mobilePanels');
+    if (panels.classList.contains('open')) {
+      panels.classList.remove('open');
+      return;
+    }
+    const left = document.getElementById('sidebarLeft');
+    const right = document.getElementById('sidebarRight');
+    panels.innerHTML = left.innerHTML + right.innerHTML;
+    panels.classList.add('open');
+  });
 
   async function loadTodos() {
     try {
